@@ -8,8 +8,9 @@ pytest = "*"
 tox = "*"
 
 [packages]
-sly = "*"
 pycairo = "*"
+nltk = "*"
+textblob = "*"
 
 [requires]
 python_version = "3.7"
