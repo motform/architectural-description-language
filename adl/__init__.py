@@ -20,7 +20,8 @@ Over the last 50 years, our world has turned digital at breakneck speed. No art 
 def main():
     """Entry point for the application script"""
     tags = parser.generate_tags(text)
-    graphics.draw('test', tags)
+    sentiment = parser.generate_sentiment(text)
+    graphics.draw(tags, filename='test', sentiment=sentiment, width=500, height=500)
 
 
 if __name__ == '__main__':
