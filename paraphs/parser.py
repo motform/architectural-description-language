@@ -10,6 +10,10 @@ Text parsing using TextBlob.
 from textblob import TextBlob
 
 
+def remove_stop_words(text):
+    pass
+
+
 def generate_tags(text):
     """
     Parses a text using Textblob and returns a
