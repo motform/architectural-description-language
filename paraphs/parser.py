@@ -10,6 +10,25 @@ Text parsing using TextBlob.
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from textblob import TextBlob
+import ntpath
+import sys
+
+
+def read_file(file):
+    """Open UTF-8 file and return complete contents as string."""
+    try:
+        with open(file, 'rt', encoding='UTF-8') as file:
+            return file.read()
+    except UnicodeDecodeError:
+        print("Unable to decode file, pass a file with valid UTF-8 encoding.")
+        sys.exit(1)
+
+
+def get_filename(file, file_extension='.svg'):
+    """Reads name of an input file and converts it into a suitable output name."""
+    file = ntpath.basename(file)
+    file = file.split('.')[0]
+    return file + file_extension
 
 
 def remove_stop_words(text):

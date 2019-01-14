@@ -31,7 +31,7 @@ def sentiment_color(context, sentiment):
 
 def hide_center(context):
     """Hides part of the center to make our ways a bit more transparent."""
-    context.set_source_rgb(1, 1, 1)
+    context.set_source_rgb(0, 0, 0)
     context.arc(0.5, 0.5, 20, 0, 2 * math.pi)
     context.fill()
 
@@ -43,7 +43,7 @@ def draw(tags, filename: str, width: int, height: int, sentiment=1):
     through the words of input text. Picks the appropriate action by
     calling a dict (tag_handler) in the Stencils module."""
 
-    with cairo.SVGSurface(filename + '.svg', width, height) as surface:
+    with cairo.SVGSurface(filename, width, height) as surface:
         context = cairo.Context(surface)
         context.set_line_width(0.5)
         context.scale(width, height)

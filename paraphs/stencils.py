@@ -19,6 +19,7 @@ from helpers import str_to_float
 
 import math
 from random import Random
+from functools import wraps
 
 
 def handler(context, word, tag, tags):
@@ -27,46 +28,69 @@ def handler(context, word, tag, tags):
     Once the appropriate turn of action is found in the dict,
     a stencil function is called as an inner function."""
 
-    random = Random(hash(word))  # Deterministic randomnes
     float_word = str_to_float(word)
+    random = Random(float_word)  # Deterministic randomnes
+
+    # Decorators
+
+    def central(func):
+        """Deocrator of central stencils"""
+
+        @wraps(func)
+        def wrapped():
+            context.save()
+            context.translate(0.5, 0.5)
+            func()
+            context.restore()
+        return wrapped
+
+    # Stencils
 
     def floating_triangle():
-        """draws a floating triangle"""
-        pass
+        """Floating Triangle tba"""
 
     def floating_circle():
-        """Floating Circle"""
-        context.arc(random.uniform(0, 1), 0.5,  # positon
-                    float_word / 2,                   # radius
-                    0, 2 * math.pi)             # angle (start, end)
+        """Floating Circle tba."""
+        print('floating circle')
+        context.new_sub_path()
+        context.arc(random.uniform(0, 1), random.uniform(0, 1),
+                    float_word / 10,                                # radius
+                    0, 2 * math.pi)                                 # angle (start, end)
 
+    @central
     def central_line():
+        print('central line')
         """Draw central_line from center and out."""
-        context.move_to(0.5, 0.5)                            # x1, y1
-        context.line_to(float_word, random.uniform(0, 1))  # x2, y2
+        context.new_sub_path()
+        context.move_to(0, 0)
+        context.line_to(float_word, random.uniform(0, 1))           # x2, y2
 
     def central_arc():
+        print('central arc')
         """Draws and central_arc based on the hashing of word."""
-        context.arc(0.5, 0.5,                   # position
-                    word / 2,                   # radius
-                    random.uniform(0, 1), random.uniform(0, 1))
+        context.new_sub_path()
+        context.arc(0.5, 0.5,                                       # position
+                    float_word / 2,                                 # radius
+                    random.uniform(0.3, 1), random.uniform(0, 1))   # angle (start, end)
 
     def adj():
         """Handles adjectives and adverbs. When these tags are found
         we use the sentiment subjectivity to set the central_line weight,
         importance, of the next drawable word."""
-        adj_sentiment = parser.generate_sentiment_subjectivity(word)
-        context.set_line_width(adj_sentiment)
+        pass
+        # adj_sentiment = parser.generate_sentiment_subjectivity(word)
+        # context.set_line_width(adj_sentiment)
 
     tag_index = {
         # Adjectives
-        'JJ':  adj(), 'JJR': adj(), 'JJS': adj(),
+        'JJ':  adj, 'JJR': adj, 'JJS': adj,
         # Adverbs
-        'RB':  adj(), 'RBR': adj(), 'RBS': adj(),
+        'RB':  adj, 'RBR': adj, 'RBS': adj,
         # Nouns
-        'NN':  central_line(), 'NNS': central_line(), 'NNP': central_line(), 'NNPS': central_line(),
+        'NN':  central_line, 'NNS':  floating_circle,
+        'NNP': central_arc,  'NNPS': central_arc,
         # Pronoun
-        'PRP': None, 'PRP$': None,
+        'PRP': floating_circle, 'PRP$': None,
         # Verbs
         'VB':  None, 'VBD': None, 'VBG': None,
         'VBN': None, 'VBP': None, 'VBZ': None,
@@ -78,9 +102,10 @@ def handler(context, word, tag, tags):
         'PDT': None, 'POS': None,
     }
 
-
+    print(word, tag)
     if tag_index[tag]:
-        tag_index[tag]
+        tag_index[tag]()  # Runs our inner function or returns False
+        context.stroke()
+        context.translate(0, 0)
 
-    context.stroke()
-
+    print()
