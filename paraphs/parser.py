@@ -4,17 +4,16 @@ Assignment 6: Final Project
 Author: Love Lagerkvist (ll223jp)
 Python version: 3.7
 
-Text parsing using TextBlob.
+Modulse does two things
 """
 
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from textblob import TextBlob
-import ntpath
 import sys
 
 
-def read_file(file):
+def read_input(file):
     """Open UTF-8 file and return complete contents as string."""
     try:
         with open(file, 'rt', encoding='UTF-8') as file:
@@ -24,16 +23,9 @@ def read_file(file):
         sys.exit(1)
 
 
-def get_filename(file, file_extension='.svg'):
-    """Reads name of an input file and converts it into a suitable output name."""
-    file = ntpath.basename(file)
-    file = file.split('.')[0]
-    return file + file_extension
-
-
 def remove_stop_words(text):
-    """Cleans a text from stopwords.
-    Stop word set provided from the NLTK."""
+    """Cleans a text from stopwords with set provided from the NLTK.
+    Note that this need to be manually downloaded. See Readme."""
     stop_words = set(stopwords.words('english'))
     text = word_tokenize(text)
     text = [word for word in text if word not in stop_words]
@@ -41,18 +33,19 @@ def remove_stop_words(text):
 
 
 def generate_tags(text):
-    """Parses a text using Textblob and returns a
-    generator object."""
+    """Parses a text using Textblob and returns a generator."""
     tags = TextBlob(text).tags
     for word, tag in tags:
         yield word, tag
 
 
-def generate_sentiment_polarity(text):
+def generate_sentiment(text, type_of_sentiment: str):
     """Parses a text using textblob and returnes the semtiment (polarity) value"""
-    return TextBlob(text).sentiment.polarity
+    if type_of_sentiment == 'subjectivity':
+        return TextBlob(text).sentiment.subjectivity
+    elif type_of_sentiment == 'polarity':
+        return TextBlob(text).sentiment.polarity
+    else:
+        print('You need to specify what type of sentiment to generate.')
+        sys.exit(-10)
 
-
-def generate_sentiment_subjectivity(text):
-    """Parses a text using textblob and returnes the semtiment (polarity) value"""
-    return TextBlob(text).sentiment.subjectivity

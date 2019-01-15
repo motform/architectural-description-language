@@ -36,20 +36,27 @@ def hide_center(context):
     context.fill()
 
 
-def draw(tags, filename: str, width: int, height: int, sentiment=1):
+def draw(tags, output: str, filetype: str, width: int, height: int, sentiment=1):
     """ Main draw function.
 
-    Sets up a Cairo instance (surface and context), and goes
-    through the words of input text. Picks the appropriate action by
-    calling a dict (tag_handler) in the Stencils module."""
+    Sets up a Cairo instance (surface and context), and goes through the
+    word-tag-tuples of input text. Picks the appropriate action by calling a
+    dict (tag_handler) in the Stencils module."""
 
-    with cairo.SVGSurface(filename, width, height) as surface:
-        context = cairo.Context(surface)
-        context.set_line_width(0.5)
-        context.scale(width, height)
-        sentiment_color(context, sentiment)
+    if filetype == 'svg':
+        surface = cairo.SVGSurface(output, width, height)
+    elif filetype == 'pdf':
+        surface = cairo.PDFSurface(output, width, height)
+    elif filetype == 'png':
+        surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
 
-        for word, tag in tags:
-            # Using a dict as a switch kind of thing
-            stencils.handler(context, word, tag, tags)
+    context = cairo.Context(surface)
+    context.set_line_width(0.5)
+    context.scale(width, height)
+    sentiment_color(context, sentiment)
 
+    for word, tag in tags:
+        stencils.handler(context, word, tag)
+
+    if filetype == 'png':  # Cairo requires bitmaps to be explicitly written
+        surface.write_to_png(output)

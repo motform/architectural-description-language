@@ -1,4 +1,3 @@
-
 """
 4ME501 - Programming for Digital Humanities - 2019
 Assignment 6: Final Project
