@@ -11,6 +11,8 @@ tox = "*"
 pycairo = "*"
 nltk = "*"
 textblob = "*"
+setuptools = "*"
+wheel = "*"
 
 [requires]
 python_version = "3.7"

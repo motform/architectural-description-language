@@ -7,7 +7,7 @@ Python version: 3.7
 Module that handles command line arguments.
 """
 
-import parser
+from paraphs import parser
 
 from argparse import ArgumentParser
 from textwrap import dedent

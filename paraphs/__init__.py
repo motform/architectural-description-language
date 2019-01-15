@@ -9,18 +9,20 @@ Delegates data to responsible modules.
 """
 
 
-import parser
-import argument_handler
-import graphics
+from paraphs import parser
+from paraphs import argument_handler
+from paraphs import graphics
 
 
-def main(args):
+def main():
     """Entry point for the application script.
 
     Does the following:
     1. Reads and parses the text file with 'parser' module.
     2. Handles arguments with the 'argument_handler' module.
     3. Transfers data and control over to graphics.draw()."""
+
+    args = argument_handler.parse_args()
 
     # Parse text
     text = parser.read_input(args.input)
@@ -36,4 +38,4 @@ def main(args):
 
 
 if __name__ == '__main__':
-    main(argument_handler.parse_args())
+    main()

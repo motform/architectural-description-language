@@ -8,10 +8,9 @@ Module that handles the Cairo Surface and Context.
 The drawing instructions are called stencils and found in that file.
 """
 
-import stencils
+from paraphs import stencils
 
 import cairo
-import math
 
 
 def sentiment_color(context, sentiment):
@@ -29,13 +28,6 @@ def sentiment_color(context, sentiment):
     context.set_source_rgb(fg, fg, fg)  # Set our pen color
 
 
-def hide_center(context):
-    """Hides part of the center to make our ways a bit more transparent."""
-    context.set_source_rgb(0, 0, 0)
-    context.arc(0.5, 0.5, 20, 0, 2 * math.pi)
-    context.fill()
-
-
 def draw(tags, output: str, filetype: str, width: int, height: int, sentiment=1):
     """ Main draw function.
 
@@ -51,8 +43,10 @@ def draw(tags, output: str, filetype: str, width: int, height: int, sentiment=1)
         surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
 
     context = cairo.Context(surface)
-    context.set_line_width(0.5)
     context.scale(width, height)
+    context.set_line_width(0.007)
+    context.set_line_join(cairo.LINE_JOIN_ROUND)
+    context.set_line_cap(cairo.LINE_CAP_ROUND)
     sentiment_color(context, sentiment)
 
     for word, tag in tags:

@@ -7,6 +7,9 @@ dist/
 __pycache__/
 *.so
 *~
+*.png
+*.svg
+*.pdf
 
 # due to using tox and pytest
 .tox

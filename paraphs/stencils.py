@@ -10,15 +10,19 @@ There are two main types of stencils:
     Floating - Stencils that float in the surface
     Central  - Stencils that grow from the center coordinate.
 
+Stencils are either drawn filled our outlined. This is
+controlled by decorators on a per-stencil basis.
+
 The Cairo surface is normalized, which means that any
 instructions have to be in the [0:1] decimal range.
 """
 
-import parser
-from helpers import str_to_float
+# import parser
+from paraphs import helpers
 
 import math
 from random import Random
+from functools import wraps
 
 
 def handler(context, word, tag):
@@ -27,29 +31,58 @@ def handler(context, word, tag):
     Once the appropriate turn of action is found in the dict,
     a stencil function is called as an inner function."""
 
-    float_word = str_to_float(word)
+    float_word = helpers.str_to_float(word)
     random = Random(float_word)  # Deterministic randomnes
 
-    def floating_rectangle():
+    # Decorators
+
+    def fill(func):
+        """Decorator - renders stencil filled."""
+        @wraps(func)
+        def wrapped():
+            func()
+            context.fill()
+        return wrapped
+
+    def stroke(func):
+        """Decorator - renders stencil as an outline (stroke only)."""
+        @wraps(func)
+        def wrapped():
+            func()
+            context.stroke()
+        return wrapped
+
+    # Stencils
+
+    @fill
+    def floating_row_rectangles():
         """Floting rect tba"""
-        pass
+        iterations = int(str(float_word)[2])
+        x1, x2 = float_word, float_word
+
+        for i in range(1, iterations + 1):
+            context.rectangle(x1, x2, 0.01, 0.03)  # x1 y1 x2 y2
+            x1 += 0.03
 
     def floating_triangle():
         """Floating Triangle tba"""
         pass
 
+    @fill
     def floating_circle():
         """Floating Circle tba."""
         context.new_sub_path()
         context.arc(random.uniform(0, 1), random.uniform(0, 1),
-                    float_word / 10,                                # radius
+                    float_word / 50,                                # radius
                     0, 2 * math.pi)                                 # angle (start, end)
 
+    @stroke
     def central_line():
         """Draw central_line from center and out."""
         context.move_to(0.5, 0.5)
         context.line_to(float_word, random.uniform(0, 1))           # x2, y2
 
+    @stroke
     def central_arc():
         """Draws and central_arc based on the hashing of word."""
         context.arc(0.5, 0.5,                                       # position
@@ -66,12 +99,12 @@ def handler(context, word, tag):
 
     tag_index = {
         # Adjectives
-        'JJ':  adj, 'JJR': adj, 'JJS': adj,
+        'JJ':  adj, 'JJR': floating_row_rectangles, 'JJS': floating_row_rectangles,
         # Adverbs
-        'RB':  adj, 'RBR': adj, 'RBS': adj,
+        'RB':  adj, 'RBR': adj, 'RBS': floating_row_rectangles,
         # Nouns
         'NN':  central_line, 'NNS':  floating_circle,
-        'NNP': central_arc,  'NNPS': central_arc,
+        'NNP': floating_row_rectangles,  'NNPS': floating_row_rectangles,
         # Pronoun
         'PRP': floating_circle, 'PRP$': None,
         # Verbs
@@ -87,5 +120,4 @@ def handler(context, word, tag):
 
     if tag_index[tag]:
         tag_index[tag]()  # Runs our inner function or returns False
-        context.stroke()
 
