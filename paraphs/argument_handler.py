@@ -5,12 +5,14 @@ Author: Love Lagerkvist (ll223jp)
 Python version: 3.7
 
 Module that handles command line arguments.
+
+Most of the work is handled by the ArgumentParser module
+from the Python standard library.
 """
 
 from paraphs import parser
 
 from argparse import ArgumentParser
-from textwrap import dedent
 import os.path
 import sys
 
@@ -88,14 +90,12 @@ def output(filetype, output, input_file):
             if filetype:  # If there is an extension, add it
                 output = output + '.' + filetype
             else:
-                print(dedent('Error: Invalid output file name.\
-                       Enter a filetype with -f, or a complete filename with -o.'))
+                print('Error: Invalid output file name. Enter a filetype with -f, or a complete filename with -o.')
                 sys.exit(3)
     elif filetype:  # no output, but a filetype, infer name from input
         output = infer_output(input_file) + '.' + filetype
     else:  # neither output or filename, insufficent information
-        print(dedent('Error: No filetype specified.\
-                      Enter a filetype with -f, or a completet filename with -o.'))
+        print('Error: No filetype specified. Enter a filetype with -f, or a completet filename with -o.')
         sys.exit(4)
 
     return filetype, output

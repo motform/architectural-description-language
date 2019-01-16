@@ -5,7 +5,9 @@ Author: Love Lagerkvist (ll223jp)
 Python version: 3.7
 
 Program entry point.
-Delegates data to responsible modules.
+
+For more information about Paraphs, see the
+Readme or the attached report.
 """
 
 
@@ -20,20 +22,21 @@ def main():
     Does the following:
     1. Reads and parses the text file with 'parser' module.
     2. Handles arguments with the 'argument_handler' module.
-    3. Transfers data and control over to graphics.draw()."""
+    3. Transfers data and control over to draw() in the 'graphics' moudule."""
 
     args = argument_handler.parse_args()
 
     # Parse text
     text = parser.read_input(args.input)
     text = parser.remove_stop_words(text)
-    tags = parser.generate_tags(text)
+    tokens = parser.generate_tokens(text)
 
     # Handle arguments
     sentiment = argument_handler.sentiment(args.sentiment, text)
     filetype, output = argument_handler.output(args.filetype, args.output, args.input)
 
-    graphics.draw(tags, output=output, filetype=filetype, sentiment=sentiment,
+    # Give control to the graphics moudle
+    graphics.draw(tokens, output=output, filetype=filetype, sentiment=sentiment,
                   width=args.width, height=args.height)
 
 

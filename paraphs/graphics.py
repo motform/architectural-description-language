@@ -28,12 +28,12 @@ def sentiment_color(context, sentiment):
     context.set_source_rgb(fg, fg, fg)  # Set our pen color
 
 
-def draw(tags, output: str, filetype: str, width: int, height: int, sentiment=1):
-    """ Main draw function.
+def draw(tokens, output: str, filetype: str, width: int, height: int, sentiment=1):
+    """Main draw function.
 
-    Sets up a Cairo instance (surface and context), and goes through the
-    word-tag-tuples of input text. Picks the appropriate action by calling a
-    dict (tag_handler) in the Stencils module."""
+    Sets up a Cairo instance (surface and context), and goes through the Token
+    objects. Picks the appropriate action by calling a dict (tag_handler) in
+    the Stencils module."""
 
     if filetype == 'svg':
         surface = cairo.SVGSurface(output, width, height)
@@ -42,6 +42,7 @@ def draw(tags, output: str, filetype: str, width: int, height: int, sentiment=1)
     elif filetype == 'png':
         surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
 
+    global context
     context = cairo.Context(surface)
     context.scale(width, height)
     context.set_line_width(0.007)
@@ -49,8 +50,17 @@ def draw(tags, output: str, filetype: str, width: int, height: int, sentiment=1)
     context.set_line_cap(cairo.LINE_CAP_ROUND)
     sentiment_color(context, sentiment)
 
-    for word, tag in tags:
-        stencils.handler(context, word, tag)
+    for token in tokens:
+        if stencils.tag_index[token.tag]:
+            tag = stencils.tag_index[token.tag]
+            if isinstance(tag, list):  # a tag is either a list or a function
+                try:
+                    stencil = tag.pop(token.random.randint(0, len(tag)))
+                    stencil(token)
+                except IndexError:  # Handles the limit of our tag-lists
+                    pass
+            else:
+                tag(token)
 
     if filetype == 'png':  # Cairo requires bitmaps to be explicitly written
         surface.write_to_png(output)
