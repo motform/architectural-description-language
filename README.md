@@ -24,9 +24,9 @@ nltk.download('stopwords')
 ```
 
 ## Usage
-If you decide to build the project with ```pip install -e .```, then just run it using the Paraphs alias. You can also run it directly with the Python interpreter, using ````python __init__.py [arguments]``
+If you decide to build the project with ```pip install -e .``` , then just run it using the Paraphs alias. You can also run it directly with the Python interpreter, using ```python __init__.py [arguments]```
 
 Paraphs requires at least two arguments to work: 1. an input file 2. an outpute filename or an output file type. For all the possible arguments, consult the ```--help``` flag. Regular useage might look something like this:
 
-````paraphs sample_1.txt -f pdf -s``
+```paraphs sample_1.txt -f pdf -s```
 
