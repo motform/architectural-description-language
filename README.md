@@ -1,5 +1,5 @@
 # Paraphs
-Turns your poems into relatively similar early modernist artworks!
+Turns your poems into many diffirent, but relatively similar, early modernist artworks!
 
 ## Installation
 Getting dependances set up for Paraphs requires a bit of extra work. If you use pipenv, then the pipfile contains all the neccecary information. Otherwise, the modules required are:
