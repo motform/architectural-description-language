@@ -30,3 +30,5 @@ Paraphs requires at least two arguments to work: 1. an input file 2. an outpute 
 
 ```paraphs sample_1.txt -f pdf -s```
 
+## About
+This project was built as a final examination for Linneuniversitete's course _Programming for Digital Humanities_.
