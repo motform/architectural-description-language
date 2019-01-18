@@ -192,11 +192,10 @@ tag_index = {
     'RB':  adverb,    'RBR':  adverb,    'RBS': adverb,
     'JJ':  adjective, 'JJR':  adjective, 'JJS': adjective,
     'NN':  noun,      'NNS':  noun,      'NNP': noun,      'NNPS': noun,
-    'PRP': None,      'PRP$': None,
-    'WDT': None,      'WP':   None,      'WP$': None,      'WRB': None,
-    'SYM': None,      'TO':   None,      'UH':  None,      'RP':  None,
-    'LS':  None,      'MD':   None,      'CC':  None,      'CD':  None,
-    'DT':  None,      'EX':   None,      'FW':  None,      'IN':  None,
-    'PDT': None,      'POS':  None,
+    'WDT': None,      'WP':   None,      'WP$': None,      'WRB':  None,
+    'SYM': None,      'TO':   None,      'UH':  None,      'RP':   None,
+    'LS':  None,      'MD':   None,      'CC':  None,      'CD':   None,
+    'DT':  None,      'EX':   None,      'FW':  None,      'IN':   None,
+    'PDT': None,      'POS':  None,      'PRP': None,      'PRP$': None,
 }
 
